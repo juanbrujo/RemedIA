@@ -7,11 +7,11 @@
       <div class="absolute inset-0 opacity-20 -z-10"
         style="background: radial-gradient(circle at 10% 20%, #312e81 0%, transparent 50%), radial-gradient(circle at 90% 80%, #581c87 0%, transparent 50%), radial-gradient(circle at 50% 50%, #134e4a 0%, transparent 70%);">
       </div>
-      <h1 class="font-display-xl text-[40px] md:text-[64px] leading-[1.1] tracking-tighter text-on-surface text-center mb-2 drop-shadow-sm">
-        RemedIA <span aria-label="píldora" title="RemedIA">💊</span>
+      <h1 class="font-display-xl text-[40px] md:text-[64px] leading-[1.1] tracking-tighter text-on-surface text-center mb-4 drop-shadow-sm">
+        Remed<i>IA</i> <span aria-label="píldora" title="RemedIA">💊</span>
       </h1>
       <p class="font-body-lg text-body-lg text-on-surface-variant text-center mb-8">
-        Busca y compara remedios en las 2 RemedIAs más baratas
+        Busca y compara remedios en las 2 farmacias más baratas que conozco
       </p>
 
       <div class="bg-white/40 rounded-[10px] border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.05)] backdrop-blur-xl p-8 mb-10">
