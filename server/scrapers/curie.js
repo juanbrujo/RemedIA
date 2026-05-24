@@ -1,15 +1,22 @@
-// Scraper para RemedIAs Curie (RemedIAscurie.cl)
+// Scraper para Farmacias Curie (farmaciascurie.cl)
 import * as cheerio from 'cheerio';
 
 export async function scrapeCurie(query) {
   try {
-    const url = `https://www.RemedIAscurie.cl/search?q=${encodeURIComponent(query)}&options%5Bprefix%5D=last`;
+    const url = `https://www.farmaciascurie.cl/search?q=${encodeURIComponent(query)}&options%5Bprefix%5D=last`;
     const response = await fetch(url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; remedios-finder/1.0)'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+        'Accept-Language': 'es-CL,es;q=0.9,en;q=0.8',
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+        'Referer': 'https://www.farmaciascurie.cl/'
       }
     });
-    if (!response.ok) throw new Error('No se pudo acceder a RemedIAs Curie');
+    if (!response.ok) throw new Error('No se pudo acceder a Farmacias Curie');
     const html = await response.text();
     const $ = cheerio.load(html);
     const results = [];
@@ -22,7 +29,7 @@ export async function scrapeCurie(query) {
 
       const $a = $(el);
       let link = $a.find('.product-card__image').attr('href');
-      if (link && !link.startsWith('http')) link = `https://www.RemedIAscurie.cl${link}`;
+      if (link && !link.startsWith('http')) link = `https://www.farmaciascurie.cl${link}`;
       // Título: texto del link, limpiando saltos y espacios
       const titulo = $a.find('.product-card__heading').text();
       // Precio: buscar en el mismo bloque, o en el texto cercano
@@ -51,8 +58,8 @@ export async function scrapeCurie(query) {
         });
       }
     });
-    return { pharmacy: 'RemedIAs Curie', results };
+    return { pharmacy: 'Farmacias Curie', results };
   } catch (error) {
-    return { pharmacy: 'RemedIAs Curie', results: [], error: error.message };
+    return { pharmacy: 'Farmacias Curie', results: [], error: error.message };
   }
 }

@@ -6,7 +6,14 @@ export async function scrapeFarmex(query) {
     const url = `https://farmex.cl/search?q=-tag:delete+-tag:persistente+${encodeURIComponent(query)}&ai=true&key=ai_search_results_1779574210643&options%5Bprefix%5D=last`;
     const response = await fetch(url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; remedios-finder/1.0)'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+        'Accept-Language': 'es-CL,es;q=0.9,en;q=0.8',
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+        'Referer': 'https://farmex.cl/'
       }
     });
     if (!response.ok) throw new Error('No se pudo acceder a Farmex');
