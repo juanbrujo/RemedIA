@@ -26,8 +26,8 @@
                 id="query" 
                 v-model="searchQuery"
                 maxlength="32"
-                class="w-full px-5 py-3 border border-outline-variant rounded-full bg-white/60 font-body-lg text-body-lg text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/30 pr-12 transition-all"
-                placeholder="Ingrese el nombre del remedio o principio activo..."
+                class="w-full px-5 py-3 border border-outline-variant rounded-full bg-white/60 font-display-xl text-[18px] text-on-surface leading-2 tracking-wider placeholder:text-outline focus:ring-2 focus:ring-primary/30 pr-12 transition-all"
+                placeholder="Nombre del remedio o principio activo..."
               >
               <button
                 v-if="searchQuery"
