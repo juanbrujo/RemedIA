@@ -1,0 +1,10 @@
+# .vercelignore
+node_modules
+*.log
+dist
+output
+.git
+.DS_Store
+.env
+.env.*
+/vercel
