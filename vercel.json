@@ -1,6 +1,3 @@
 {
-  "version": 2,
-  "builds": [
-    { "src": "nuxt.config.ts", "use": "@nuxt/vercel-builder" }
-  ]
+  "version": 2
 }
