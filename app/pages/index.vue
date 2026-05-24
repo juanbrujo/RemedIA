@@ -56,8 +56,28 @@
         <div v-if="resultsByPharmacy.Farmex.length > 0 || resultsByPharmacy.Curie.length > 0">
           
           <h2 class="font-headline-lg leading-tight text-[24px] md:text-[32px] text-on-surface mb-8 text-center">
-            Resultados de búsqueda para <i class="bg-secondary-container text-on-secondary-container font-label-caps text-label-caps px-2 py-1 rounded-full uppercase">{{ searchQuery.trim() }}</i>
+            Resultados de búsqueda para
+            <a
+              v-if="wikiExtract"
+              href="#"
+              @click.prevent="showWikiModal = true"
+              class="bg-secondary-container text-on-secondary-container font-label-caps text-label-caps px-4 py-1 rounded-full uppercase italic border-b-2 border-green-500 decoration-dotted hover:decoration-solid"
+            >
+              {{ searchQuery.trim() }}
+            </a>
+            <span v-else class="bg-secondary-container text-on-secondary-container font-label-caps text-label-caps rounded-full uppercase italic">{{ searchQuery.trim() }}</span>
           </h2>
+          <WikiModal
+            v-if="wikiExtract"
+            :show="showWikiModal"
+            :title="wikiTitle"
+            :extract="wikiExtract"
+            @close="showWikiModal = false"
+          >
+            <template #footer>
+              <a :href="wikiLink" target="_blank" rel="noopener" class="text-primary underline mt-4 inline-block">Ver en Wikipedia</a>
+            </template>
+          </WikiModal>
           <div class="grid grid-cols-2 gap-4 md:gap-8">
             <!-- Farmex Column -->
             <div>
@@ -76,13 +96,13 @@
                 </div>
                 <div v-else class="text-center text-outline-variant" key="curie-empty">Sin resultados</div>
               </Transition>
-            </div>
+            </div>  
           </div>
         </div>
 
-        <div v-else-if="isLoading === false && searched && resultsByPharmacy.Farmex.length > 0 || resultsByPharmacy.Curie.length > 0">
+        <div v-else-if="!isLoading && searched && resultsByPharmacy.Farmex.length === 0 && resultsByPharmacy.Curie.length === 0">
           <p class="text-center text-headline-md text-on-surface group-hover:text-primary transition-colors text-xl font-light">
-            No se encontraron resultados. Intente con otro término.
+            No se encontraron resultados. 💥 Intente con otro término.
           </p>
         </div>
       </Transition>
@@ -94,11 +114,13 @@
 
 
 <script setup lang="ts">
+
 import { ref, Transition } from 'vue'
 import { useFetch } from '#app'
 import ResultCard from '~/components/ResultCard.vue'
 import AppFooter from '~/components/AppFooter.vue'
 import PharmacyTitle from '~/components/PharmacyTitle.vue'
+import WikiModal from '~/components/WikiModal.vue'
 import { useHead } from '@unhead/vue'
 
 useHead({
@@ -124,6 +146,33 @@ const resultsByPharmacy = ref({ Farmex: [], Curie: [] })
 const isLoading = ref(false)
 const searched = ref(false)
 
+// Wikipedia modal state
+const showWikiModal = ref(false)
+const wikiExtract = ref('')
+const wikiTitle = ref('')
+const wikiLink = ref('')
+
+const fetchWikipedia = async (query: string) => {
+  const url = `https://es.wikipedia.org/w/api.php?action=query&prop=extracts&exintro&explaintext&titles=${encodeURIComponent(query)}&format=json&origin=*`
+  try {
+    const res = await fetch(url)
+    const json = await res.json()
+    const pages = json.query?.pages || {}
+    const page = Object.values(pages)[0]
+    if (page && page.extract) {
+      wikiExtract.value = page.extract
+      wikiTitle.value = page.title
+      wikiLink.value = `https://es.wikipedia.org/wiki/${encodeURIComponent(page.title)}`
+      return true
+    }
+  } catch (e) {
+    // ignore
+  }
+  wikiExtract.value = ''
+  wikiTitle.value = ''
+  wikiLink.value = ''
+  return false
+}
 
 const searchRemedies = async () => {
   if (!searchQuery.value.trim()) return
@@ -133,6 +182,9 @@ const searchRemedies = async () => {
 
   isLoading.value = true
   searched.value = true
+
+  // Fetch Wikipedia info in parallel
+  await fetchWikipedia(searchQuery.value.trim())
 
   try {
     // Call our scraping API endpoint
@@ -169,6 +221,9 @@ const searchRemedies = async () => {
 const clearSearch = () => {
   searchQuery.value = ''
   resultsByPharmacy.value = { Farmex: [], Curie: [] }
+  wikiExtract.value = ''
+  wikiTitle.value = ''
+  wikiLink.value = ''
 }
 </script>
 
