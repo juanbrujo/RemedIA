@@ -111,10 +111,7 @@
   </div>
 </template>
 
-
-
 <script setup lang="ts">
-
 import { ref, Transition } from 'vue'
 import { useFetch } from '#app'
 import ResultCard from '~/components/ResultCard.vue'
@@ -132,13 +129,20 @@ useHead({
     { property: 'og:title', content: 'RemedIA 💊 | Busca y compara remedios' },
     { property: 'og:description', content: 'Busca y compara precios de remedios en Farmex y Curie.' },
     { property: 'og:type', content: 'website' },
-    { property: 'og:site_name', content: 'RemedIA 💊' }
+    { property: 'og:site_name', content: 'RemedIA 💊' },
+    // PWA manifest
+    { name: 'theme-color', content: '#f3e8ff' },
+    { name: 'apple-mobile-web-app-capable', content: 'yes' },
+    { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
+    { name: 'apple-mobile-web-app-title', content: 'RemedIA' }
   ],
   link: [
-    { rel: 'icon', href: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💊</text></svg>' }
+    { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+    { rel: 'icon', type: 'image/png', href: '/favicon.png' },
+    { rel: 'manifest', href: '/manifest.webmanifest' },
+    { rel: 'apple-touch-icon', href: '/favicon.png' }
   ]
 })
-
 
 const searchQuery = ref('')
 const lastSearchedQuery = ref('')
