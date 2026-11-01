@@ -4,8 +4,8 @@
   "description": "Busca y compara remedios",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f3e8ff",
-  "theme_color": "#f3e8ff",
+  "background_color": "#fff9ee",
+  "theme_color": "#fff9ee",
   "orientation": "portrait",
   "icons": [
     {

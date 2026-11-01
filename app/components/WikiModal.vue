@@ -2,19 +2,18 @@
   <transition name="fade-slide">
     <div v-if="show" class="fixed inset-0 z-50 flex items-center justify-center">
       <div class="absolute inset-0 bg-black/30 backdrop-blur-[6px]" @click="close"></div>
-      <div
-        class="relative bg-white/90 rounded-[32px] shadow-xl max-w-lg w-[90vw] md:w-[600px] px-2 py-8"
-      >
+      <div class="relative w-[90vw] max-w-lg rounded-4xl border border-white/70 bg-white/90 px-2 py-8 shadow-glow-lg md:w-[600px]">
         <button
-          class="absolute top-4 right-4 text-2xl cursor-pointer text-outline-variant hover:text-primary focus:outline-none"
+          class="absolute top-4 right-4 cursor-pointer text-outline-variant hover:text-primary focus:outline-none"
           @click="close"
           aria-label="Cerrar"
         >
           <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-        <div class="p-4 mt-4 overflow-y-auto" :style="{ maxWidth: '90vw', maxHeight: '80vh' }">
-          <h3 class="font-headline-md text-on-surface font-bold border-b border-black/10 pb-2 mb-2">{{ title }}</h3>
-          <p class="font-body-md text-on-surface-variant whitespace-pre-line">{{ extract }}</p>
+        <div class="mt-4 max-h-[80vh] max-w-[90vw] overflow-y-auto p-4">
+          <h3 class="mb-2 border-b border-black/10 pb-2 text-2xl font-bold tracking-tight text-on-surface">{{ title }}</h3>
+          <p class="whitespace-pre-line text-on-surface-variant">{{ extract }}</p>
+          <slot name="footer" />
         </div>
       </div>
     </div>
@@ -22,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, watch, onMounted, onBeforeUnmount } from 'vue'
+import { watch, onMounted, onBeforeUnmount } from 'vue'
 const props = defineProps<{ show: boolean, title: string, extract: string }>()
 const emit = defineEmits(['close'])
 const close = () => emit('close')
@@ -45,17 +44,3 @@ onBeforeUnmount(() => {
   setBodyOverflow(false)
 })
 </script>
-
-<style scoped>
-.fade-slide-enter-active, .fade-slide-leave-active {
-  transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1);
-}
-.fade-slide-enter-from, .fade-slide-leave-to {
-  opacity: 0;
-  transform: translateY(16px);
-}
-.fade-slide-enter-to, .fade-slide-leave-from {
-  opacity: 1;
-  transform: translateY(0);
-}
-</style>

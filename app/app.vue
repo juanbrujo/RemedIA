@@ -8,7 +8,6 @@
 
 <script setup>
 import Index from './pages/index.vue'
-import './tailwind.css'
 import { useHead } from '@unhead/vue'
 useHead({
   link: [

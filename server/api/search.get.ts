@@ -1,6 +1,8 @@
 // API endpoint for searching remedies
 import { scrapeFarmex } from '../scrapers/farmex.js';
 import { scrapeCurie } from '../scrapers/curie.js';
+import { scrapeAhumada } from '../scrapers/ahumada.js';
+import { scrapeSimi } from '../scrapers/simi.js';
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event).q;
@@ -12,14 +14,16 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    // Ejecutar ambos scrapers en paralelo
-    const [farmexResults, curieResults] = await Promise.all([
+    // Ejecutar todos los scrapers en paralelo
+    const results = await Promise.all([
       scrapeFarmex(query),
-      scrapeCurie(query)
+      scrapeCurie(query),
+      scrapeAhumada(query),
+      scrapeSimi(query)
     ]);
     return {
       query,
-      results: [farmexResults, curieResults]
+      results
     };
   } catch (error) {
     return {

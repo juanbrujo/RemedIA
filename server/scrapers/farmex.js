@@ -20,51 +20,29 @@ export async function scrapeFarmex(query) {
     const html = await response.text();
     const $ = cheerio.load(html);
     const results = [];
-    // Buscar todos los h3 con <a> adentro (estructura de Farmex)
-    $('h3').each((_, el) => {
-      const $heading = $(el);
-      const $a = $heading.find('a').first();
+    // Cada producto es un .card-wrapper (tema Shopify de Farmex)
+    $('.card-wrapper').each((_, el) => {
+      const $card = $(el);
+      const $a = $card.find('h3.card__heading a').first();
       if ($a.length === 0) return;
+
       const titulo = $a.text().trim();
       let link = $a.attr('href') || '';
       if (link && !link.startsWith('http')) link = `https://farmex.cl${link}`;
 
-      // Buscar imagen: puede estar dentro del heading o en el siguiente hermano
-      let precio = '';
-      let laboratorio = '';
-      let imagen = '';
-      let oferta = '';
-      let status = '';
-      // .price__badge-sold-out
-      let next = $heading.next();
-      let prev = $heading.prev();
-      let parent = $heading.parent();
-      while (prev && prev.length && !prev.text().trim()) prev = prev.prev();
-      if (prev && prev.length) {
-        // Laboratorio: buscar patrones comunes de laboratorio
-        const prevText = prev.text();
-        laboratorio = prevText
-        // Buscar patrón ![...](url)
-        const mdImg = parent.parents('.grid__item').find('img').attr('src');
+      const laboratorio = $card.find('.product__vendor').first().text().trim();
 
-        if (mdImg && mdImg.length) {
-          imagen = mdImg.replace(' 370w', '');
-          if (imagen && !imagen.startsWith('http')) imagen = `https:${imagen}`;
-        }
-      }
-      // El precio está en el siguiente nodo de texto (hermano)
-      // Saltar nodos vacíos
-      while (next && next.length && !next.text().trim()) next = next.next();
-      if (next && next.length) {
-        const nextText = next.text();
-        // Precio
-        const priceMatch = nextText.match(/\$[\d\.]+/g);
-        if (priceMatch && priceMatch.length > 0) precio = priceMatch[0];
-        // Status
-        status = next.find('.price--sold-out .price__badge-sold-out').text().includes('Agotado') ? 'Agotado' : '';
-        // Oferta
-        oferta = next.find('.price--on-sale .price__badge-sale').text().includes('Oferta') ? 'Oferta' : '';
-      }
+      // .price-item--last es el precio vigente (con o sin oferta)
+      const $price = $card.find('.price').first();
+      const precioText = $price.find('.price-item--last').first().text() || $price.find('.price-item--regular').first().text();
+      const precio = (precioText.match(/\$[\d.]+/) || [''])[0];
+
+      let imagen = $card.find('.card__media img').first().attr('src') || '';
+      if (imagen && !imagen.startsWith('http')) imagen = `https:${imagen}`;
+
+      const status = $price.hasClass('price--sold-out') ? 'Agotado' : '';
+      const oferta = $price.hasClass('price--on-sale') ? 'Oferta' : '';
+
       if (titulo && link && precio) {
         results.push({
           titulo,

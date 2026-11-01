@@ -1,13 +1,17 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import tailwindcss from '@tailwindcss/vite'
 import pkg from './package.json'
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   modules: [
-    '@nuxtjs/tailwindcss',
     '@vite-pwa/nuxt'
   ],
+  css: ['~/assets/css/main.css'],
+  vite: {
+    plugins: [tailwindcss()]
+  },
   runtimeConfig: {
     public: {
       version: pkg.version
@@ -19,8 +23,8 @@ export default defineNuxtConfig({
       name: 'RemedIA',
       short_name: 'RemedIA',
       description: 'Busca y compara remedios',
-      theme_color: '#f3e8ff',
-      background_color: '#f3e8ff',
+      theme_color: '#fff9ee',
+      background_color: '#fff9ee',
       display: 'standalone',
       orientation: 'portrait',
       icons: [

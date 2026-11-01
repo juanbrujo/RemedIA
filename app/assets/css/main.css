@@ -1,0 +1,51 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/forms";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --color-background: #fff9ee;
+  --color-surface: #fff9ee;
+  --color-surface-variant: #f3ede2;
+  --color-on-surface: #1d1c15;
+  --color-on-surface-variant: #56423c;
+  --color-outline: #89726b;
+  --color-outline-variant: #ddc0b8;
+
+  --color-primary: #ff5e3a;
+  --color-primary-strong: #9f4122;
+  --color-primary-container: #ff8a65;
+  --color-on-primary: #ffffff;
+  --color-secondary-container: #d6ed7a;
+  --color-on-secondary-container: #3f4c00;
+  --color-tertiary-container: #bbe9ff;
+  --color-on-tertiary-container: #074457;
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+
+  --radius-card: 2rem;
+
+  --shadow-glow: 0 8px 32px rgb(255 94 58 / 0.08);
+  --shadow-glow-lg: 0 16px 48px rgb(255 94 58 / 0.14);
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    background-color: var(--color-background);
+    color: var(--color-on-surface);
+  }
+}
+
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition:
+    opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(16px);
+}
