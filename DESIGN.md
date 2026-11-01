@@ -108,7 +108,7 @@ The visual language relies on heavy whitespace, soft atmospheric transitions, an
 
 ## Colors
 
-The color strategy for this design system utilizes a "Bright-Soft" approach. Backgrounds primarily use **Off-White (#F7F1E6)** to avoid the clinical feel of pure white, providing a warm, parchment-like canvas. 
+The color strategy for this design system utilizes a "Bright-Soft" approach. Backgrounds primarily use **Off-White (#FFF9EE)** to avoid the clinical feel of pure white, providing a warm, parchment-like canvas. 
 
 **Warm Orange** and **Peach** serve as the primary action and energy colors, while **Pale Lime** and **Soft Cyan** act as accent highlights for AI-generated content or success states. **Pale Lavender** is reserved for deep-focus areas and subtle background depth. All colors should be used with high transparency (10-30% alpha) when creating "glassy" background blurs to maintain a sense of airiness.
 
@@ -155,3 +155,24 @@ Small pill-shaped elements using the **Pale Lime** or **Soft Cyan** at 20% opaci
 
 ### AI Canvas
 A specialized component for the app-builder workspace featuring a "dotted" grid background in Light Gray, where floating glassy panels house the builder tools.
+
+## Implementación
+
+Los tokens viven en `app/assets/css/main.css` (Tailwind v4, bloque `@theme`). Los valores en uso difieren levemente de la tabla de colores de arriba:
+
+- `primary` es **#FF5E3A** (acción y acentos grandes). `primary-strong` es **#9F4122** (el `primary` de la tabla) y se usa para texto, porque tiene mejor contraste sobre fondos claros.
+- `background` y `surface` son **#FFF9EE**.
+- Chips y etiquetas usan `secondary-container` (lima) para ofertas y `error-container` para agotado.
+- Sombras con un tinte naranja de baja opacidad (`shadow-glow`, `shadow-glow-lg`).
+
+### Efectos
+
+- **Título y nombres de farmacia:** `SparklesText` de Inspira UI (destellos naranja y celeste).
+- **Tarjetas de resultado:** entrada escalonada con desenfoque (`motion-v`, 80 ms entre tarjetas) y efecto de presión al hacer clic (`while-tap`).
+- **Buscador:** píldora de vidrio (`backdrop-blur`) fija arriba (`sticky`); el contenedor raíz usa `overflow-x-clip`, porque `overflow-x-hidden` rompe el sticky.
+- **Chips de farmacia:** checkboxes ocultos (`sr-only`) con una píldora que cambia de color al marcarse (`peer-checked`).
+
+### Convenciones de las tarjetas
+
+Toda la tarjeta es un enlace al producto. La oferta y el estado agotado van como etiquetas sobre la imagen; el título admite 2 líneas; la marca va a la izquierda y el precio a la derecha de la misma fila.
+
