@@ -85,14 +85,18 @@
             </a>
             <span v-else class="rounded-full bg-secondary-container px-4 py-1 text-sm font-bold tracking-widest text-on-secondary-container uppercase italic">{{ lastSearchedQuery }}</span>
           </h2>
-          <a
-            :href="salcobrandUrl"
-            target="_blank"
-            rel="noopener"
-            class="mx-auto mb-8 flex w-fit items-center gap-2 rounded-full border border-white/70 bg-white/70 px-5 py-2 text-sm font-bold text-primary-strong shadow-glow backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:shadow-glow-lg active:scale-95"
-          >
-            También buscar en Salcobrand <span aria-hidden="true">↗</span>
-          </a>
+          <div class="mb-8 flex flex-wrap items-center justify-center gap-3">
+            <a
+              v-for="link in externalLinks"
+              :key="link.name"
+              :href="link.url"
+              target="_blank"
+              rel="noopener"
+              class="flex items-center gap-2 rounded-full border border-white/70 bg-white/70 px-5 py-2 text-sm font-bold text-primary-strong shadow-glow backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:shadow-glow-lg active:scale-95"
+            >
+              También buscar en {{ link.name }} <span aria-hidden="true">↗</span>
+            </a>
+          </div>
           <WikiModal
             v-if="wikiExtract"
             :show="showWikiModal"
@@ -127,14 +131,18 @@
             No se encontraron resultados. 💥 Intente con otro término.
           </p>
           <div class="mt-6">
-            <a
-              :href="salcobrandUrl"
-              target="_blank"
-              rel="noopener"
-              class="mx-auto mb-8 flex w-fit items-center gap-2 rounded-full border border-white/70 bg-white/70 px-5 py-2 text-sm font-bold text-primary-strong shadow-glow backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:shadow-glow-lg active:scale-95"
-            >
-              También buscar en Salcobrand <span aria-hidden="true">↗</span>
-            </a>
+            <div class="mb-8 flex flex-wrap items-center justify-center gap-3">
+              <a
+                v-for="link in externalLinks"
+                :key="link.name"
+                :href="link.url"
+                target="_blank"
+                rel="noopener"
+                class="flex items-center gap-2 rounded-full border border-white/70 bg-white/70 px-5 py-2 text-sm font-bold text-primary-strong shadow-glow backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:shadow-glow-lg active:scale-95"
+              >
+                También buscar en {{ link.name }} <span aria-hidden="true">↗</span>
+              </a>
+            </div>
           </div>
         </div>
       </Transition>
@@ -209,7 +217,14 @@ const isLoading = ref(false)
 const searched = ref(false)
 const resultsEl = ref<HTMLElement | null>(null)
 
-const salcobrandUrl = computed(() => `https://salcobrand.cl/search_result?query=${encodeURIComponent(lastSearchedQuery.value || searchQuery.value.trim())}`)
+// Farmacias sin scraper: solo abren su propia búsqueda
+const externalLinks = computed(() => {
+  const q = encodeURIComponent(lastSearchedQuery.value || searchQuery.value.trim())
+  return [
+    { name: 'Salcobrand', url: `https://salcobrand.cl/search_result?query=${q}` },
+    { name: 'Cruz Verde', url: `https://www.cruzverde.cl/search?query=${q}` }
+  ]
+})
 
 const hasResults = computed(() => selectedPharmacies.value.some(p => resultsByPharmacy.value[p].length > 0))
 
