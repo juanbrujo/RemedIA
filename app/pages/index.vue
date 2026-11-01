@@ -244,12 +244,6 @@ const fetchWikipedia = async (query: string) => {
   resetWiki()
 }
 
-// "$25.790" (Farmex) o "$15,500" (Curie) -> 25790. Sin precio válido va al final.
-const priceValue = (precio: unknown) => {
-  const n = parseInt(String(precio ?? '').replace(/\D/g, ''), 10)
-  return Number.isNaN(n) ? Infinity : n
-}
-
 const fetchPrices = async (query: string) => {
   const data: any = await $fetch('/api/search', { query: { q: query } })
   const byPharmacy = emptyResults()

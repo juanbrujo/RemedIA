@@ -31,11 +31,11 @@ export async function scrapeCurie(query) {
       let link = $a.find('.product-card__image').attr('href');
       if (link && !link.startsWith('http')) link = `https://www.farmaciascurie.cl${link}`;
       // Título: texto del link, limpiando saltos y espacios
-      const titulo = $a.find('.product-card__heading').text();
+      const titulo = $a.find('.product-card__heading').text().trim();
       // Precio: buscar en el mismo bloque, o en el texto cercano
       let precio = '';
       // Buscar span con CLP o $ cerca
-      precio = $a.find('.price div:contains("$")').text().replace(' CLP', '');
+      precio = $a.find('.price div:contains("$")').text().replace(' CLP', '').trim();
 
       // Imagen: buscar img cerca del link
       let imagen = '';
@@ -46,7 +46,7 @@ export async function scrapeCurie(query) {
         if (imagen && !imagen.startsWith('http')) imagen = `https:${imagen}`;
       }
       // Status
-      const status = $a.find('.badge').text();
+      const status = $a.find('.badge').text().trim();
 
       if (titulo && precio && link) {
         results.push({
